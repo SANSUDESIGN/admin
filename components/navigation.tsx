@@ -90,8 +90,8 @@ export const Navigation = () => {
                   </p>
                   <div className="mt-8 text-xs uppercase tracking-widest">
                     <p className="text-white mb-2">Contacto</p>
-                    <a href="mailto:hello@sansuart.design" className="hover:text-white transition-colors">
-                      hello@sansuart.design
+                    <a href="mailto:hello@sansu.design" className="hover:text-white transition-colors">
+                      hello@sansu.design
                     </a>
                   </div>
                 </div>

@@ -8,11 +8,11 @@ export const Footer = () => {
           <div className="flex flex-col gap-8">
             <h3 className="text-2xl font-medium tracking-tight">Hablemos de arte.</h3>
             <a
-              href="mailto:hello@sansuart.design"
+              href="mailto:hello@sansu.design"
               className="flex items-center gap-3 text-stone-400 hover:text-white transition-colors text-lg"
             >
               <Mail size={20} />
-              hello@sansuart.design
+              hello@sansu.design
             </a>
           </div>
 
@@ -46,7 +46,7 @@ export const Footer = () => {
           <div className="flex flex-col items-end gap-4">
             <div className="flex gap-8 text-xs text-stone-500 uppercase tracking-widest">
               <a href="#privacidad" className="hover:text-white transition-colors">Política de privacidad</a>
-              <span>© 2025 Sansu</span>
+              <span>© 2025 Sansu Design</span>
             </div>
             <p className="text-xs text-stone-600 max-w-xs text-right leading-relaxed">
               Conforme a la Ley 25.326 de Protección de Datos Personales (Argentina). Tus datos nunca son compartidos con terceros.

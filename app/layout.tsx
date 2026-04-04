@@ -6,9 +6,28 @@ import './globals.css'
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sansu.design';
+
 export const metadata: Metadata = {
-  title: 'Sansu Art',
-  description: 'Esculturas orgánicas y detalles de interior, hechos a mano.',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'Sansu Design — Esculturas orgánicas hechas a mano',
+    template: '%s | Sansu Design',
+  },
+  description: 'Esculturas orgánicas y detalles de interior, hechos a mano — una pieza a la vez.',
+  openGraph: {
+    type: 'website',
+    locale: 'es_AR',
+    url: siteUrl,
+    siteName: 'Sansu Design',
+    title: 'Sansu Design — Esculturas orgánicas hechas a mano',
+    description: 'Esculturas orgánicas y detalles de interior, hechos a mano — una pieza a la vez.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sansu Design — Esculturas orgánicas hechas a mano',
+    description: 'Esculturas orgánicas y detalles de interior, hechos a mano — una pieza a la vez.',
+  },
   icons: {
     icon: [
       {
