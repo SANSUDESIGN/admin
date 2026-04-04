@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
@@ -9,6 +10,28 @@ interface Props {
 
 export async function generateStaticParams() {
   return PRODUCTS.map((p) => ({ slug: toSlug(p.title) }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const product = PRODUCTS.find((p) => toSlug(p.title) === slug);
+  if (!product) return {};
+
+  return {
+    title: product.title,
+    description: product.description,
+    openGraph: {
+      title: `${product.title} | Sansu Design`,
+      description: product.description,
+      images: [{ url: product.images[0], alt: product.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${product.title} | Sansu Design`,
+      description: product.description,
+      images: [product.images[0]],
+    },
+  };
 }
 
 export default async function ProductPage({ params }: Props) {
@@ -24,8 +47,28 @@ export default async function ProductPage({ params }: Props) {
   const igDmUrl = 'https://ig.me/m/sansuart';
   const waUrl = `https://wa.me/5491126201691?text=${encodeURIComponent(`Hola, me interesa la pieza "${product.title}" (${product.price})`)}`;
 
+  const numericPrice = product.price.replace('ARS ', '').replace(/\./g, '');
+  const productSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    description: product.description,
+    image: product.images[0],
+    offers: {
+      '@type': 'Offer',
+      priceCurrency: 'ARS',
+      price: numericPrice,
+      availability: 'https://schema.org/InStock',
+    },
+  };
+
   return (
     <main className="min-h-screen bg-canvas text-stone-900 font-sans">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+
       {/* Back */}
       <div className="container mx-auto px-6 pt-28 pb-8">
         <Link

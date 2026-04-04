@@ -45,7 +45,7 @@ export const Footer = () => {
           </div>
           <div className="flex flex-col items-end gap-4">
             <div className="flex gap-8 text-xs text-stone-500 uppercase tracking-widest">
-              <a href="#privacidad" className="hover:text-white transition-colors">Política de privacidad</a>
+              <a href="/privacidad" className="hover:text-white transition-colors">Política de privacidad</a>
               <span>© 2025 Sansu Design</span>
             </div>
             <p className="text-xs text-stone-600 max-w-xs text-right leading-relaxed">
