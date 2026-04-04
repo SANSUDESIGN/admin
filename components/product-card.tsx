@@ -1,0 +1,47 @@
+import { ArrowUpRight } from 'lucide-react';
+import type { Product } from '@/lib/data';
+
+interface ProductCardProps {
+  product: Product;
+  index: number;
+}
+
+export const ProductCard = ({ product, index }: ProductCardProps) => {
+  return (
+    <div className={`group flex flex-col ${index % 2 === 1 ? 'md:mt-32' : ''}`}>
+      <div className="relative overflow-hidden aspect-[4/5] mb-6 bg-stone-100">
+        <div className="absolute inset-0 bg-stone-900/0 group-hover:bg-stone-900/10 transition-colors duration-500 z-10" />
+        <img
+          src={product.image || "/placeholder.svg"}
+          alt={product.title}
+          className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105"
+        />
+      </div>
+
+      <div className="flex justify-between items-start border-t border-stone-200 pt-4 mb-3">
+        <div>
+          <h3 className="text-2xl font-medium tracking-tight mb-1">{product.title}</h3>
+          <p className="text-sm text-stone-400">{product.medium}</p>
+          <p className="text-sm text-stone-400 mt-0.5">{product.dimensions}</p>
+        </div>
+        <div className="text-right hidden md:block">
+          <p className="text-sm">{product.year}</p>
+          <p className="text-sm text-stone-400">{product.category}</p>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <p className="text-base font-medium tracking-tight">{product.price}</p>
+        <a
+          href={product.mercadolibreUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-xs uppercase tracking-widest border border-stone-900 px-4 py-2 hover:bg-stone-900 hover:text-white transition-colors duration-300"
+        >
+          Comprar en MercadoLibre
+          <ArrowUpRight size={14} />
+        </a>
+      </div>
+    </div>
+  );
+};
