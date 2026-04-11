@@ -44,7 +44,7 @@ export default async function ProductPage({ params }: Props) {
     (p) => p.category === product.category && p.id !== product.id
   );
 
-  const igDmUrl = 'https://ig.me/m/sansuart';
+  const igDmUrl = 'https://ig.me/m/sansudesign';
   const waUrl = `https://wa.me/5491126201691?text=${encodeURIComponent(`Hola, me interesa la pieza "${product.title}" (${product.price})`)}`;
 
   const numericPrice = product.price.replace('ARS ', '').replace(/\./g, '');

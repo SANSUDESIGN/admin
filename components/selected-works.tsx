@@ -19,7 +19,7 @@ export const SelectedWorks = () => {
 
         <div className="mt-32 flex justify-center">
           <a
-            href="https://www.instagram.com/sansuart"
+            href="https://www.instagram.com/sansudesign"
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-3 text-sm uppercase tracking-widest hover:text-stone-400 transition-colors"

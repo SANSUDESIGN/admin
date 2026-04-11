@@ -27,12 +27,12 @@ export const Footer = () => {
           <div className="flex flex-col gap-4">
             <h4 className="text-xs uppercase tracking-widest text-stone-500 mb-2">Redes</h4>
             <a
-              href="https://www.instagram.com/sansuart"
+              href="https://www.instagram.com/sansudesign"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-stone-300 hover:text-white transition-colors"
             >
-              <Instagram size={16} /> @sansuart
+              <Instagram size={16} /> @sansudesign
             </a>
           </div>
         </div>

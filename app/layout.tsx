@@ -47,7 +47,7 @@ const organizationSchema = {
   name: 'Sansu Design',
   url: siteUrl,
   email: 'hello@sansu.design',
-  sameAs: ['https://www.instagram.com/sansuart'],
+  sameAs: ['https://www.instagram.com/sansudesign'],
 };
 
 export default function RootLayout({
