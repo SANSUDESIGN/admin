@@ -1,13 +1,13 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Leaf, Heart, User } from 'lucide-react';
+import { Fingerprint, Heart, User } from 'lucide-react';
 
 const values = [
   {
-    icon: <Leaf size={28} strokeWidth={1.5} />,
-    title: "Orgánico",
-    description: "Formas tomadas de la naturaleza — imperfectas, vivas, enraizadas en la tierra.",
+    icon: <Fingerprint size={28} strokeWidth={1.5} />,
+    title: "Sin ediciones",
+    description: "Cada obra existe una sola vez. No hay series, no hay copias. Al adquirirla, es tuya — y de nadie más.",
   },
   {
     icon: <Heart size={28} strokeWidth={1.5} />,

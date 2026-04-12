@@ -20,7 +20,7 @@ export default function PrivacidadPage() {
             <h2 className="text-xs uppercase tracking-widest text-stone-900">Responsable del tratamiento</h2>
             <p>
               Sansu Design es una marca unipersonal. Ante cualquier consulta relacionada con el tratamiento
-              de tus datos personales podés escribir a{' '}
+              de tus datos personales puedes escribir a{' '}
               <a href="mailto:hello@sansu.design" className="text-stone-900 underline underline-offset-4">
                 hello@sansu.design
               </a>.
@@ -31,7 +31,7 @@ export default function PrivacidadPage() {
             <h2 className="text-xs uppercase tracking-widest text-stone-900">Datos que recopilamos</h2>
             <p>
               Este sitio no utiliza formularios de contacto ni registros de usuario.
-              Los únicos datos que podemos recibir son los que vos nos enviás voluntariamente
+              Los únicos datos que puedo recibir son los que me envías voluntariamente
               al iniciar una conversación por correo electrónico, WhatsApp o Instagram.
             </p>
             <p>
@@ -43,8 +43,8 @@ export default function PrivacidadPage() {
           <section className="flex flex-col gap-3">
             <h2 className="text-xs uppercase tracking-widest text-stone-900">Finalidad del tratamiento</h2>
             <p>
-              Utilizamos tus datos exclusivamente para responder a tu consulta o gestionar una compra.
-              No los usamos para enviar comunicaciones comerciales no solicitadas.
+              Utilizo tus datos exclusivamente para responder a tu consulta o gestionar una compra.
+              No los uso para enviar comunicaciones comerciales no solicitadas.
             </p>
           </section>
 
@@ -69,12 +69,12 @@ export default function PrivacidadPage() {
             <h2 className="text-xs uppercase tracking-widest text-stone-900">Tus derechos</h2>
             <p>
               Conforme a la Ley 25.326 de Protección de Datos Personales de la República Argentina,
-              tenés derecho a acceder, rectificar, actualizar y suprimir tus datos personales.
-              Para ejercer cualquiera de estos derechos, escribinos a{' '}
+              tienes derecho a acceder, rectificar, actualizar y suprimir tus datos personales.
+              Para ejercer cualquiera de estos derechos, escríbeme a{' '}
               <a href="mailto:hello@sansu.design" className="text-stone-900 underline underline-offset-4">
                 hello@sansu.design
               </a>{' '}
-              indicando tu nombre y el derecho que querés ejercer. Responderemos en un plazo máximo
+              indicando tu nombre y el derecho que quieres ejercer. Responderé en un plazo máximo
               de 5 días hábiles.
             </p>
             <p>
@@ -86,7 +86,7 @@ export default function PrivacidadPage() {
           <section className="flex flex-col gap-3">
             <h2 className="text-xs uppercase tracking-widest text-stone-900">Conservación de datos</h2>
             <p>
-              Conservamos los datos de contacto únicamente mientras sean necesarios para la finalidad
+              Conservo los datos de contacto únicamente mientras sean necesarios para la finalidad
               por la que fueron recibidos. Una vez resuelta la consulta o finalizada la relación
               comercial, los datos son eliminados.
             </p>
@@ -95,8 +95,8 @@ export default function PrivacidadPage() {
           <section className="flex flex-col gap-3">
             <h2 className="text-xs uppercase tracking-widest text-stone-900">Cambios en esta política</h2>
             <p>
-              Podemos actualizar esta política en cualquier momento. Los cambios entran en vigencia
-              desde su publicación en este sitio. Te recomendamos revisarla periódicamente.
+              Puedo actualizar esta política en cualquier momento. Los cambios entran en vigencia
+              desde su publicación en este sitio. Te recomiendo revisarla periódicamente.
             </p>
             <p className="text-stone-400">Última actualización: abril de 2025.</p>
           </section>

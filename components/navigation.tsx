@@ -4,7 +4,15 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
-const navItems = ["Inicio", "Esculturas", "Detalles de interior", "Sobre mí", "Estudio", "Proyectos", "Contacto"];
+const navItems = [
+  { label: "Inicio", href: "#inicio" },
+  { label: "Esculturas", href: "#seleccion-de-obras" },
+  { label: "Detalles de interior", href: "#seleccion-de-obras" },
+  { label: "Sobre mí", href: "#estudio" },
+  { label: "Proyectos", href: "#seleccion-de-obras" },
+  { label: "Preguntas", href: "#preguntas" },
+  { label: "Contacto", href: "#contacto" },
+];
 
 export const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,9 +24,9 @@ export const Navigation = () => {
           <Menu size={24} strokeWidth={1.5} />
         </button>
 
-        <span className="font-bold text-lg tracking-tighter uppercase pointer-events-auto">
+        <a href="/" className="font-bold text-lg tracking-tighter uppercase pointer-events-auto">
           SANSU/ DESIGN
-        </span>
+        </a>
 
         <a
           href="https://wa.me/5491126201691"
@@ -65,17 +73,17 @@ export const Navigation = () => {
                 <ul className="flex flex-col gap-4">
                   {navItems.map((item, i) => (
                     <motion.li
-                      key={item}
+                      key={item.label}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.1 + i * 0.07, duration: 0.5 }}
                     >
                       <a
-                        href={`#${item.toLowerCase().replace(/\s+/g, '-')}`}
+                        href={item.href}
                         onClick={() => setIsOpen(false)}
                         className="text-4xl md:text-6xl font-light tracking-tighter hover:ml-4 transition-all duration-300 block group"
                       >
-                        {item}
+                        {item.label}
                         <span className="text-base ml-2 opacity-0 group-hover:opacity-100 align-top text-stone-500 transition-opacity">
                           0{i + 1}
                         </span>

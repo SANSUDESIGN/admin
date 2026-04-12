@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown } from 'lucide-react';
+import { HERO_IMAGE } from '@/lib/data';
 
 export const Hero = () => {
   const { scrollY } = useScroll();
@@ -9,9 +10,12 @@ export const Hero = () => {
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   return (
-    <section className="relative h-screen w-full overflow-hidden bg-stone-100 flex items-center justify-center border-b border-stone-200">
-      <motion.div style={{ y: y1 }} className="absolute inset-0 z-0">
-        <div className="w-full h-full bg-[url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2400&auto=format&fit=crop')] bg-cover bg-center grayscale opacity-20"></div>
+    <section id="inicio" className="relative h-screen w-full overflow-hidden bg-stone-100 flex items-center justify-center border-b border-stone-200">
+      <motion.div style={{ y: y1 }} className="absolute inset-0 z-0 scale-125">
+        <div
+          className="w-full h-full bg-cover bg-center grayscale opacity-40"
+          style={{ backgroundImage: `url(${HERO_IMAGE})` }}
+        />
       </motion.div>
 
       <div className="z-10 container mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-6 h-full items-end pb-24">

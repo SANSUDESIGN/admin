@@ -5,6 +5,7 @@ import { Hero } from '@/components/hero';
 import { SelectedWorks } from '@/components/selected-works';
 import { ArtValues } from '@/components/art-values';
 import { Studio } from '@/components/studio';
+import { FAQ } from '@/components/faq';
 
 export const ArchitectureWebsite = () => {
   return (
@@ -15,6 +16,7 @@ export const ArchitectureWebsite = () => {
         <SelectedWorks />
         <ArtValues />
         <Studio />
+        <FAQ />
       </main>
     </div>
   );

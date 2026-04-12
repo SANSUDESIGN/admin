@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
 import { PRODUCTS, toSlug } from '@/lib/data';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -119,6 +120,26 @@ export default async function ProductPage({ params }: Props) {
                 <span>{product.dimensions}</span>
               </div>
             </div>
+
+            {/* Additional info */}
+            <Accordion type="single" collapsible className="border-t border-stone-200">
+              <AccordionItem value="cuidado">
+                <AccordionTrigger className="text-xs uppercase tracking-widest hover:no-underline">
+                  Cuidado de la pieza
+                </AccordionTrigger>
+                <AccordionContent className="text-sm text-stone-500 leading-relaxed">
+                  Para conservar la pieza en buen estado, límpiala con un paño seco y suave. Evita la exposición directa al sol y el contacto prolongado con humedad.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="encargos">
+                <AccordionTrigger className="text-xs uppercase tracking-widest hover:no-underline">
+                  Encargos
+                </AccordionTrigger>
+                <AccordionContent className="text-sm text-stone-500 leading-relaxed">
+                  Si una pieza ya no está disponible, puedes escribirme para consultar un encargo. Cuéntame qué pieza te interesa y lo platicamos.
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
 
             {/* CTAs */}
             <div className="flex flex-col gap-3 pt-2">

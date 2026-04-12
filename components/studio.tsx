@@ -7,8 +7,11 @@ export const Studio = () => {
             <h2 className="text-xs font-bold uppercase tracking-widest mb-8 sticky top-32">Sobre mí</h2>
           </div>
           <div className="lg:col-span-8">
-            <p className="text-3xl md:text-5xl lg:text-6xl font-light leading-[1.1] tracking-tight mb-12">
-              SANSU es un estudio dedicado a la escultura contemporánea y a piezas murales en relieve. Cada obra se desarrolla como una pieza única, concebida para integrarse al espacio con precisión y presencia.
+            <p className="text-lg md:text-3xl lg:text-4xl font-light leading-[1.1] tracking-tight mb-6">
+              SANSU es un estudio dedicado a la escultura contemporánea y a piezas murales en relieve.
+            </p>
+            <p className="text-base md:text-lg font-light leading-snug tracking-tight text-stone-500 mb-12">
+              Cada obra se desarrolla como una pieza única, concebida para integrarse al espacio con precisión y presencia.
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-sm leading-relaxed text-stone-500 mb-12">

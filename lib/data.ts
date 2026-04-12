@@ -1,3 +1,5 @@
+export const HERO_IMAGE = 'https://7mroc0yqlb36pr4e.public.blob.vercel-storage.com/products/IMG_8416.jpeg';
+
 export type Product = {
   id: number;
   title: string;
