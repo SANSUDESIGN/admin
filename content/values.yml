@@ -1,0 +1,10 @@
+items:
+  - icon: "fingerprint"
+    title: "Sin ediciones"
+    description: "Cada obra existe una sola vez. No hay series, no hay copias. Al adquirirla, es tuya — y de nadie más."
+  - icon: "heart"
+    title: "Hecho con cuidado"
+    description: "Cada pieza se construye a mano de principio a fin, con atención plena en cada etapa."
+  - icon: "user"
+    title: "Un solo creador"
+    description: "Sin fábrica, sin equipo. Un par de manos detrás de cada obra."

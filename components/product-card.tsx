@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { Product } from '@/lib/data';
+import type { Product } from '@/lib/types';
 import { toSlug } from '@/lib/data';
 
 interface ProductCardProps {

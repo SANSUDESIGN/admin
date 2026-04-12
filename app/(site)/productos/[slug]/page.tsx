@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowUpRight, ArrowLeft } from 'lucide-react';
-import { PRODUCTS, toSlug } from '@/lib/data';
+import { getVisibleProducts } from '@/lib/content';
+import { toSlug } from '@/lib/data';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 
 interface Props {
@@ -10,12 +11,12 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  return PRODUCTS.map((p) => ({ slug: toSlug(p.title) }));
+  return getVisibleProducts().map((p) => ({ slug: toSlug(p.title) }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => toSlug(p.title) === slug);
+  const product = getVisibleProducts().find((p) => toSlug(p.title) === slug);
   if (!product) return {};
 
   return {
@@ -37,11 +38,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
-  const product = PRODUCTS.find((p) => toSlug(p.title) === slug);
+  const products = getVisibleProducts();
+  const product = products.find((p) => toSlug(p.title) === slug);
 
   if (!product) notFound();
 
-  const related = PRODUCTS.filter(
+  const related = products.filter(
     (p) => p.category === product.category && p.id !== product.id
   );
 
@@ -70,7 +72,6 @@ export default async function ProductPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
 
-      {/* Back */}
       <div className="container mx-auto px-6 pt-28 pb-8">
         <Link
           href="/#seleccion-de-obras"
@@ -81,11 +82,9 @@ export default async function ProductPage({ params }: Props) {
         </Link>
       </div>
 
-      {/* Product */}
       <div className="container mx-auto px-6 pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
 
-          {/* Image gallery — vertical scroll */}
           <div className="flex flex-col gap-4">
             {product.images.map((src, i) => (
               <div key={i} className="overflow-hidden bg-stone-100 aspect-[4/5]">
@@ -98,7 +97,6 @@ export default async function ProductPage({ params }: Props) {
             ))}
           </div>
 
-          {/* Details — sticky on desktop */}
           <div className="lg:sticky lg:top-28 lg:self-start flex flex-col gap-10">
             <div>
               <p className="text-xs uppercase tracking-widest text-stone-400 mb-3">{product.category}</p>
@@ -121,7 +119,6 @@ export default async function ProductPage({ params }: Props) {
               </div>
             </div>
 
-            {/* Additional info */}
             <Accordion type="single" collapsible className="border-t border-stone-200">
               <AccordionItem value="cuidado">
                 <AccordionTrigger className="text-xs uppercase tracking-widest hover:no-underline">
@@ -141,7 +138,6 @@ export default async function ProductPage({ params }: Props) {
               </AccordionItem>
             </Accordion>
 
-            {/* CTAs */}
             <div className="flex flex-col gap-3 pt-2">
               <a
                 href={product.mercadolibreUrl}
@@ -174,7 +170,6 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
 
-        {/* Related pieces */}
         {related.length > 0 && (
           <div className="mt-40">
             <div className="flex justify-between items-end mb-16 border-b border-stone-200 pb-6">

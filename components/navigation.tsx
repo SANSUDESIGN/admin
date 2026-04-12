@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import type { FooterContent } from '@/lib/types';
 
 const navItems = [
   { label: "Inicio", href: "#inicio" },
@@ -14,7 +15,7 @@ const navItems = [
   { label: "Contacto", href: "#contacto" },
 ];
 
-export const Navigation = () => {
+export const Navigation = ({ footerContent }: { footerContent: FooterContent }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -29,7 +30,7 @@ export const Navigation = () => {
         </a>
 
         <a
-          href="https://wa.me/5491126201691"
+          href={footerContent.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           className="pointer-events-auto"
@@ -94,12 +95,12 @@ export const Navigation = () => {
 
                 <div className="hidden md:flex flex-col justify-end pb-4 text-stone-400">
                   <p className="text-sm max-w-xs leading-relaxed">
-                    Esculturas orgánicas y detalles de interior, hechos a mano — una pieza a la vez.
+                    {footerContent.navTagline}
                   </p>
                   <div className="mt-8 text-xs uppercase tracking-widest">
                     <p className="text-white mb-2">Contacto</p>
-                    <a href="mailto:hello@sansu.design" className="hover:text-white transition-colors">
-                      hello@sansu.design
+                    <a href={`mailto:${footerContent.email}`} className="hover:text-white transition-colors">
+                      {footerContent.email}
                     </a>
                   </div>
                 </div>

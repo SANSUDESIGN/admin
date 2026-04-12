@@ -1,9 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
-import { Navigation } from '@/components/navigation';
-import { Footer } from '@/components/footer';
-import { MotionProvider } from '@/components/motion-provider';
 import './globals.css';
 
 const _geist = Geist({ subsets: ['latin'] });
@@ -62,11 +59,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans antialiased">
-        <MotionProvider>
-          <Navigation />
-          {children}
-          <Footer />
-        </MotionProvider>
+        {children}
         <Analytics />
       </body>
     </html>

@@ -1,38 +1,38 @@
 import { Mail, Instagram } from 'lucide-react';
+import type { FooterContent } from '@/lib/types';
 
-export const Footer = () => {
+export const Footer = ({ content }: { content: FooterContent }) => {
   return (
     <footer id="contacto" className="bg-night text-white pt-32 pb-12">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-32">
           <div className="flex flex-col gap-8">
-            <h3 className="text-2xl font-medium tracking-tight">Hablemos de arte.</h3>
+            <h3 className="text-2xl font-medium tracking-tight">{content.tagline}</h3>
             <a
-              href="mailto:hello@sansu.design"
+              href={`mailto:${content.email}`}
               className="flex items-center gap-3 text-stone-400 hover:text-white transition-colors text-lg"
             >
               <Mail size={20} />
-              hello@sansu.design
+              {content.email}
             </a>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h4 className="text-xs uppercase tracking-widest text-stone-500 mb-2">Estudio</h4>
-            <p className="text-sm leading-relaxed text-stone-300">
-              El mundo es mi estudio.<br />
-              Viajo constantemente y creo desde donde esté — Buenos Aires, un pueblo de montaña, una mesa prestada. Cada pieza se envía desde donde esté la arcilla.
+            <h4 className="text-xs uppercase tracking-widest text-stone-500 mb-2">{content.studioHeading}</h4>
+            <p className="text-sm leading-relaxed text-stone-300 whitespace-pre-line">
+              {content.studioText}
             </p>
           </div>
 
           <div className="flex flex-col gap-4">
-            <h4 className="text-xs uppercase tracking-widest text-stone-500 mb-2">Redes</h4>
+            <h4 className="text-xs uppercase tracking-widest text-stone-500 mb-2">{content.socialHeading}</h4>
             <a
-              href="https://www.instagram.com/sansudesign"
+              href={content.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-stone-300 hover:text-white transition-colors"
             >
-              <Instagram size={16} /> @sansudesign
+              <Instagram size={16} /> {content.instagramHandle}
             </a>
           </div>
         </div>
@@ -46,10 +46,10 @@ export const Footer = () => {
           <div className="flex flex-col items-end gap-4">
             <div className="flex gap-8 text-xs text-stone-500 uppercase tracking-widest">
               <a href="/privacidad" className="hover:text-white transition-colors">Política de privacidad</a>
-              <span>© 2025 Sansu Design</span>
+              <span>{content.copyright}</span>
             </div>
             <p className="text-xs text-stone-600 max-w-xs text-right leading-relaxed">
-              Conforme a la Ley 25.326 de Protección de Datos Personales (Argentina). Tus datos nunca son compartidos con terceros.
+              {content.privacyNote}
             </p>
           </div>
         </div>
