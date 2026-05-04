@@ -2,8 +2,8 @@ import { getProducts } from '@/lib/content';
 import { ProductForm } from '@/components/admin/ProductForm';
 import type { Product } from '@/lib/types';
 
-export default function NewProductPage() {
-  const allProducts = getProducts();
+export default async function NewProductPage() {
+  const allProducts = await getProducts();
   const nextId = allProducts.length > 0 ? Math.max(...allProducts.map((p) => p.id)) + 1 : 1;
 
   const emptyProduct: Product = {

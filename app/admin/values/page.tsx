@@ -1,8 +1,8 @@
 import { getValuesContent } from '@/lib/content';
 import { ValuesForm } from './ValuesForm';
 
-export default function ValuesAdminPage() {
-  const content = getValuesContent();
+export default async function ValuesAdminPage() {
+  const content = await getValuesContent();
   return (
     <div className="p-10 max-w-2xl">
       <p className="text-xs uppercase tracking-widest text-stone-400 mb-2">Sección</p>

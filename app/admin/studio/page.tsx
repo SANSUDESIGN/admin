@@ -1,8 +1,8 @@
 import { getStudioContent } from '@/lib/content';
 import { StudioForm } from './StudioForm';
 
-export default function StudioAdminPage() {
-  const content = getStudioContent();
+export default async function StudioAdminPage() {
+  const content = await getStudioContent();
   return (
     <div className="p-10 max-w-2xl">
       <p className="text-xs uppercase tracking-widest text-stone-400 mb-2">Sección</p>

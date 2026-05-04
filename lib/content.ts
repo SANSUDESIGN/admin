@@ -1,6 +1,4 @@
-import fs from 'fs';
-import path from 'path';
-import yaml from 'js-yaml';
+import { kv } from '@vercel/kv';
 import type {
   HeroContent,
   WorksContent,
@@ -11,25 +9,30 @@ import type {
   ProductsData,
 } from './types';
 
-const contentDir = path.join(process.cwd(), 'content');
-
-function readYaml<T>(filename: string): T {
-  const filePath = path.join(contentDir, filename);
-  const raw = fs.readFileSync(filePath, 'utf8');
-  return yaml.load(raw) as T;
+async function kvGet<T>(key: string): Promise<T> {
+  const val = await kv.get<T>(key);
+  if (val === null) throw new Error(`KV key "${key}" not found — run the seed script first.`);
+  return val;
 }
 
-export function writeYaml(filename: string, data: unknown): void {
-  const filePath = path.join(contentDir, filename);
-  fs.writeFileSync(filePath, yaml.dump(data, { lineWidth: -1 }), 'utf8');
+export async function writeKv(key: string, data: unknown): Promise<void> {
+  await kv.set(key, data);
 }
 
-export const getHeroContent = () => readYaml<HeroContent>('hero.yml');
-export const getWorksContent = () => readYaml<WorksContent>('works.yml');
-export const getValuesContent = () => readYaml<ValuesContent>('values.yml');
-export const getStudioContent = () => readYaml<StudioContent>('studio.yml');
-export const getFaqContent = () => readYaml<FaqContent>('faq.yml');
-export const getFooterContent = () => readYaml<FooterContent>('footer.yml');
-export const getProductsData = () => readYaml<ProductsData>('products.yml');
-export const getProducts = () => getProductsData().products;
-export const getVisibleProducts = () => getProducts().filter((p) => !p.hidden);
+export const getHeroContent = () => kvGet<HeroContent>('hero');
+export const getWorksContent = () => kvGet<WorksContent>('works');
+export const getValuesContent = () => kvGet<ValuesContent>('values');
+export const getStudioContent = () => kvGet<StudioContent>('studio');
+export const getFaqContent = () => kvGet<FaqContent>('faq');
+export const getFooterContent = () => kvGet<FooterContent>('footer');
+export const getProductsData = () => kvGet<ProductsData>('products');
+
+export async function getProducts() {
+  const data = await getProductsData();
+  return data?.products ?? [];
+}
+
+export async function getVisibleProducts() {
+  const products = await getProducts();
+  return products.filter((p) => !p.hidden);
+}
