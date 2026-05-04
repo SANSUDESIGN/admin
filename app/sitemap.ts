@@ -1,10 +1,10 @@
 import { getVisibleProducts } from '@/lib/content';
 import { toSlug } from '@/lib/data';
 
-export default function sitemap() {
+export default async function sitemap() {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://sansu.design';
 
-  const products = getVisibleProducts().map((p) => ({
+  const products = (await getVisibleProducts()).map((p) => ({
     url: `${base}/productos/${toSlug(p.title)}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,

@@ -1,8 +1,8 @@
 import { getHeroContent } from '@/lib/content';
 import { HeroForm } from './HeroForm';
 
-export default function HeroAdminPage() {
-  const content = getHeroContent();
+export default async function HeroAdminPage() {
+  const content = await getHeroContent();
   return (
     <div className="p-10 max-w-2xl">
       <p className="text-xs uppercase tracking-widest text-stone-400 mb-2">Sección</p>

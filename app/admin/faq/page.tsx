@@ -1,8 +1,8 @@
 import { getFaqContent } from '@/lib/content';
 import { FaqForm } from './FaqForm';
 
-export default function FaqAdminPage() {
-  const content = getFaqContent();
+export default async function FaqAdminPage() {
+  const content = await getFaqContent();
   return (
     <div className="p-10 max-w-2xl">
       <p className="text-xs uppercase tracking-widest text-stone-400 mb-2">Sección</p>

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getValuesContent, writeYaml } from '@/lib/content';
+import { getValuesContent, writeKv } from '@/lib/content';
 import type { ValuesContent } from '@/lib/types';
 
 export async function GET() {
-  return NextResponse.json(getValuesContent());
+  return NextResponse.json(await getValuesContent());
 }
 
 export async function POST(request: NextRequest) {
   const data = (await request.json()) as ValuesContent;
-  writeYaml('values.yml', data);
+  await writeKv('values', data);
   return NextResponse.json({ ok: true });
 }

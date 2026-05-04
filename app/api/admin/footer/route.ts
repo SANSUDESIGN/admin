@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getFooterContent, writeYaml } from '@/lib/content';
+import { getFooterContent, writeKv } from '@/lib/content';
 import type { FooterContent } from '@/lib/types';
 
 export async function GET() {
-  return NextResponse.json(getFooterContent());
+  return NextResponse.json(await getFooterContent());
 }
 
 export async function POST(request: NextRequest) {
   const data = (await request.json()) as FooterContent;
-  writeYaml('footer.yml', data);
+  await writeKv('footer', data);
   return NextResponse.json({ ok: true });
 }

@@ -1,8 +1,8 @@
 import { getWorksContent } from '@/lib/content';
 import { WorksForm } from './WorksForm';
 
-export default function WorksAdminPage() {
-  const content = getWorksContent();
+export default async function WorksAdminPage() {
+  const content = await getWorksContent();
   return (
     <div className="p-10 max-w-2xl">
       <p className="text-xs uppercase tracking-widest text-stone-400 mb-2">Sección</p>

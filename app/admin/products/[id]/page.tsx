@@ -8,7 +8,7 @@ interface Props {
 
 export default async function EditProductPage({ params }: Props) {
   const { id } = await params;
-  const allProducts = getProducts();
+  const allProducts = await getProducts();
   const product = allProducts.find((p) => p.id === Number(id));
 
   if (!product) notFound();

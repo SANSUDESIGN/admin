@@ -1,8 +1,8 @@
 import { getProducts } from '@/lib/content';
 import { ProductListClient } from './ProductListClient';
 
-export default function ProductsAdminPage() {
-  const products = getProducts();
+export default async function ProductsAdminPage() {
+  const products = await getProducts();
   return (
     <div className="p-10">
       <div className="flex justify-between items-start mb-10">

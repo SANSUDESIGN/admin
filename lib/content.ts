@@ -9,17 +9,23 @@ import type {
   ProductsData,
 } from './types';
 
+async function kvGet<T>(key: string): Promise<T> {
+  const val = await kv.get<T>(key);
+  if (val === null) throw new Error(`KV key "${key}" not found — run the seed script first.`);
+  return val;
+}
+
 export async function writeKv(key: string, data: unknown): Promise<void> {
   await kv.set(key, data);
 }
 
-export const getHeroContent = () => kv.get<HeroContent>('hero');
-export const getWorksContent = () => kv.get<WorksContent>('works');
-export const getValuesContent = () => kv.get<ValuesContent>('values');
-export const getStudioContent = () => kv.get<StudioContent>('studio');
-export const getFaqContent = () => kv.get<FaqContent>('faq');
-export const getFooterContent = () => kv.get<FooterContent>('footer');
-export const getProductsData = () => kv.get<ProductsData>('products');
+export const getHeroContent = () => kvGet<HeroContent>('hero');
+export const getWorksContent = () => kvGet<WorksContent>('works');
+export const getValuesContent = () => kvGet<ValuesContent>('values');
+export const getStudioContent = () => kvGet<StudioContent>('studio');
+export const getFaqContent = () => kvGet<FaqContent>('faq');
+export const getFooterContent = () => kvGet<FooterContent>('footer');
+export const getProductsData = () => kvGet<ProductsData>('products');
 
 export async function getProducts() {
   const data = await getProductsData();
