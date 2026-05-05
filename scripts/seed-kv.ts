@@ -7,10 +7,15 @@
 import fs from 'fs';
 import path from 'path';
 import yaml from 'js-yaml';
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import { loadEnvConfig } from '@next/env';
 
 loadEnvConfig(process.cwd());
+
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
 
 const contentDir = path.join(process.cwd(), 'content');
 
@@ -21,7 +26,7 @@ async function seed() {
     const filePath = path.join(contentDir, `${key}.yml`);
     const raw = fs.readFileSync(filePath, 'utf8');
     const data = yaml.load(raw);
-    await kv.set(key, data);
+    await redis.set(key, data);
     console.log(`✓ Seeded "${key}"`);
   }
   console.log('\nAll sections seeded successfully.');

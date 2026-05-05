@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const sections = [
   { label: 'Dashboard', href: '/admin' },
@@ -19,6 +19,12 @@ const sections = [
 
 export function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  async function handleLogout() {
+    await fetch('/api/auth/logout', { method: 'POST' });
+    router.push('/login');
+  }
 
   return (
     <aside className="w-56 shrink-0 bg-white border-r border-stone-200 flex flex-col">
@@ -47,14 +53,21 @@ export function AdminSidebar() {
         )}
       </nav>
 
-      <div className="px-3 pb-4">
+      <div className="px-3 pb-4 flex flex-col gap-1">
         <a
-          href="/"
+          href="https://sansu.design"
           target="_blank"
+          rel="noopener noreferrer"
           className="block px-3 py-2 text-xs text-stone-400 hover:text-stone-600 transition-colors"
         >
           Ver sitio →
         </a>
+        <button
+          onClick={handleLogout}
+          className="text-left px-3 py-2 text-xs text-stone-400 hover:text-stone-600 transition-colors"
+        >
+          Cerrar sesión
+        </button>
       </div>
     </aside>
   );

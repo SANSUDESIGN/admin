@@ -1,4 +1,4 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import type {
   HeroContent,
   WorksContent,
@@ -9,14 +9,19 @@ import type {
   ProductsData,
 } from './types';
 
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL!,
+  token: process.env.KV_REST_API_TOKEN!,
+});
+
 async function kvGet<T>(key: string): Promise<T> {
-  const val = await kv.get<T>(key);
+  const val = await redis.get<T>(key);
   if (val === null) throw new Error(`KV key "${key}" not found — run the seed script first.`);
   return val;
 }
 
 export async function writeKv(key: string, data: unknown): Promise<void> {
-  await kv.set(key, data);
+  await redis.set(key, data);
 }
 
 export const getHeroContent = () => kvGet<HeroContent>('hero');
