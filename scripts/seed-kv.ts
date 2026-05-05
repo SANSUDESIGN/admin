@@ -10,7 +10,7 @@ import yaml from 'js-yaml';
 import { Redis } from '@upstash/redis';
 import { loadEnvConfig } from '@next/env';
 
-loadEnvConfig(process.cwd());
+loadEnvConfig(process.cwd(), true);
 
 const redis = new Redis({
   url: process.env.KV_REST_API_URL!,
