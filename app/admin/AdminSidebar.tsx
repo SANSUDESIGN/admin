@@ -15,6 +15,7 @@ const sections = [
   { label: '──────────', href: null },
   { label: 'Productos', href: '/admin/products' },
   { label: 'Subir imágenes', href: '/admin/upload' },
+  { label: 'Fuentes', href: '/admin/font' },
 ];
 
 export function AdminSidebar() {

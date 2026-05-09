@@ -11,6 +11,7 @@ const sections = [
   { label: 'Preguntas', href: '/admin/faq', desc: 'Preguntas frecuentes' },
   { label: 'Footer', href: '/admin/footer', desc: 'Contacto, redes, texto del pie' },
   { label: 'Productos', href: '/admin/products', desc: 'Catálogo completo' },
+  { label: 'Fuentes', href: '/admin/font', desc: 'Tipografía del sitio' },
 ];
 
 type PublishStatus = 'idle' | 'building' | 'pushing' | 'done' | 'error';

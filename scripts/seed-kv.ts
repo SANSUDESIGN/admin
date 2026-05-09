@@ -19,7 +19,7 @@ const redis = new Redis({
 
 const contentDir = path.join(process.cwd(), 'content');
 
-const sections = ['hero', 'works', 'values', 'studio', 'faq', 'footer', 'products'] as const;
+const sections = ['hero', 'works', 'values', 'studio', 'faq', 'footer', 'products', 'font'] as const;
 
 async function seed() {
   for (const key of sections) {
