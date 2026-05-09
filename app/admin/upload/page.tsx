@@ -3,10 +3,19 @@
 import type { PutBlobResult } from '@vercel/blob';
 import { useState, useRef } from 'react';
 
+type FileResult =
+  | { name: string; status: 'uploading' }
+  | { name: string; status: 'success'; blob: PutBlobResult }
+  | { name: string; status: 'error'; error: string };
+
 export default function UploadPage() {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
-  const [results, setResults] = useState<PutBlobResult[]>([]);
+  const [results, setResults] = useState<FileResult[]>([]);
+
+  function updateResult(name: string, next: FileResult) {
+    setResults((prev) => prev.map((r) => (r.name === name ? next : r)));
+  }
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -14,25 +23,44 @@ export default function UploadPage() {
     if (!files || files.length === 0) return;
 
     setUploading(true);
-    const uploaded: PutBlobResult[] = [];
+    const fileList = Array.from(files);
 
-    for (const file of Array.from(files)) {
-      const response = await fetch(`/api/upload?filename=${encodeURIComponent(file.name)}`, {
-        method: 'POST',
-        body: file,
-      });
-      const blob = (await response.json()) as PutBlobResult;
-      uploaded.push(blob);
+    setResults((prev) => [
+      ...prev,
+      ...fileList.map((f): FileResult => ({ name: f.name, status: 'uploading' })),
+    ]);
+
+    try {
+      for (const file of fileList) {
+        try {
+          const response = await fetch(
+            `/api/upload?filename=${encodeURIComponent(file.name)}`,
+            { method: 'POST', body: file },
+          );
+          const data = await response.json();
+          if (!response.ok) {
+            updateResult(file.name, {
+              name: file.name,
+              status: 'error',
+              error: (data as { error?: string }).error ?? `HTTP ${response.status}`,
+            });
+          } else {
+            updateResult(file.name, { name: file.name, status: 'success', blob: data as PutBlobResult });
+          }
+        } catch {
+          updateResult(file.name, { name: file.name, status: 'error', error: 'Network error' });
+        }
+      }
+    } finally {
+      setUploading(false);
+      if (inputFileRef.current) inputFileRef.current.value = '';
     }
-
-    setResults((prev) => [...prev, ...uploaded]);
-    setUploading(false);
-    if (inputFileRef.current) inputFileRef.current.value = '';
   }
 
+  const successResults = results.filter((r): r is Extract<FileResult, { status: 'success' }> => r.status === 'success');
+
   function copyAll() {
-    const urls = results.map((r) => r.url).join('\n');
-    navigator.clipboard.writeText(urls);
+    navigator.clipboard.writeText(successResults.map((r) => r.blob.url).join('\n'));
   }
 
   return (
@@ -63,29 +91,56 @@ export default function UploadPage() {
           <div className="flex flex-col gap-4">
             <div className="flex justify-between items-center border-b border-stone-200 pb-3">
               <p className="text-xs uppercase tracking-widest text-stone-400">URLs generadas</p>
-              <button
-                onClick={copyAll}
-                className="text-xs uppercase tracking-widest text-stone-900 underline underline-offset-4"
-              >
-                Copiar todas
-              </button>
+              {successResults.length > 1 && (
+                <button
+                  onClick={copyAll}
+                  className="text-xs uppercase tracking-widest text-stone-900 underline underline-offset-4"
+                >
+                  Copiar todas
+                </button>
+              )}
             </div>
 
-            {results.map((blob) => (
-              <div key={blob.url} className="flex gap-4 items-start border-b border-stone-100 pb-4">
-                <img src={blob.url} alt="" className="w-16 h-16 object-cover bg-stone-100 shrink-0" />
-                <div className="flex flex-col gap-1 min-w-0">
-                  <p className="text-xs text-stone-400 truncate">{blob.pathname}</p>
-                  <p className="text-xs font-mono text-stone-700 break-all">{blob.url}</p>
-                  <button
-                    onClick={() => navigator.clipboard.writeText(blob.url)}
-                    className="w-fit text-xs uppercase tracking-widest text-stone-900 underline underline-offset-4 mt-1"
-                  >
-                    Copiar URL
-                  </button>
+            {results.map((result) => {
+              if (result.status === 'uploading') {
+                return (
+                  <div key={result.name} className="flex gap-4 items-center border-b border-stone-100 pb-4">
+                    <div className="w-16 h-16 bg-stone-100 shrink-0 animate-pulse" />
+                    <p className="text-xs text-stone-400">{result.name} — Subiendo…</p>
+                  </div>
+                );
+              }
+
+              if (result.status === 'error') {
+                return (
+                  <div key={result.name} className="flex gap-4 items-start border-b border-stone-100 pb-4">
+                    <div className="w-16 h-16 bg-red-50 shrink-0 flex items-center justify-center">
+                      <span className="text-red-400 text-lg">✕</span>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <p className="text-xs text-stone-500">{result.name}</p>
+                      <p className="text-xs text-red-500">{result.error}</p>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <div key={result.blob.url} className="flex gap-4 items-start border-b border-stone-100 pb-4">
+                  <img src={result.blob.url} alt="" className="w-16 h-16 object-cover bg-stone-100 shrink-0" />
+                  <div className="flex flex-col gap-1 min-w-0">
+                    <p className="text-xs text-stone-400 truncate">{result.blob.pathname}</p>
+                    <p className="text-xs font-mono text-stone-700 break-all">{result.blob.url}</p>
+                    <button
+                      onClick={() => navigator.clipboard.writeText(result.blob.url)}
+                      className="w-fit text-xs uppercase tracking-widest text-stone-900 underline underline-offset-4 mt-1"
+                    >
+                      Copiar URL
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
