@@ -7,6 +7,7 @@ import type {
   FaqContent,
   FooterContent,
   ProductsData,
+  FontContent,
 } from './types';
 
 const redis = new Redis({
@@ -31,6 +32,7 @@ export const getStudioContent = () => kvGet<StudioContent>('studio');
 export const getFaqContent = () => kvGet<FaqContent>('faq');
 export const getFooterContent = () => kvGet<FooterContent>('footer');
 export const getProductsData = () => kvGet<ProductsData>('products');
+export const getFontContent = () => kvGet<FontContent>('font');
 
 export async function getProducts() {
   const data = await getProductsData();

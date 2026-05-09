@@ -76,3 +76,8 @@ export type FooterContent = {
 export type ProductsData = {
   products: Product[];
 };
+
+export type FontContent = {
+  headingFont: string;
+  bodyFont: string;
+};
