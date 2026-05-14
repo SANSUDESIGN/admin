@@ -49,7 +49,7 @@ function googleFontsUrl(families: string[]): string {
 }
 
 export function FontForm({ defaultValues }: { defaultValues: FontContent }) {
-  const [form, setForm] = useState(defaultValues);
+  const [form, setForm] = useState({ ...defaultValues, fontSize: defaultValues.fontSize ?? 16 });
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const linkRef = useRef<HTMLLinkElement | null>(null);
 
@@ -111,20 +111,42 @@ export function FontForm({ defaultValues }: { defaultValues: FontContent }) {
             ))}
           </select>
         </div>
+
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <label className="text-[10px] uppercase tracking-widest text-stone-400">
+              Tamaño de texto
+            </label>
+            <span className="text-xs text-stone-500 tabular-nums">{form.fontSize}px</span>
+          </div>
+          <input
+            type="range"
+            min={12}
+            max={20}
+            step={1}
+            value={form.fontSize}
+            onChange={(e) => setForm((f) => ({ ...f, fontSize: Number(e.target.value) }))}
+            className="w-full accent-stone-900"
+          />
+          <div className="flex justify-between text-[10px] text-stone-300">
+            <span>12px</span>
+            <span>20px</span>
+          </div>
+        </div>
       </div>
 
       {/* Live preview */}
       <div className="border border-stone-200 bg-white p-8 flex flex-col gap-4">
         <p className="text-[10px] uppercase tracking-widest text-stone-400 mb-2">Vista previa</p>
         <h2
-          style={{ fontFamily: `'${form.headingFont}', serif` }}
-          className="text-4xl font-light tracking-tighter text-stone-900"
+          style={{ fontFamily: `'${form.headingFont}', serif`, fontSize: form.fontSize * 2.25 }}
+          className="font-light tracking-tighter text-stone-900"
         >
           Sansu Design
         </h2>
         <p
-          style={{ fontFamily: `'${form.bodyFont}', sans-serif` }}
-          className="text-sm text-stone-600 leading-relaxed max-w-sm"
+          style={{ fontFamily: `'${form.bodyFont}', sans-serif`, fontSize: form.fontSize }}
+          className="text-stone-600 leading-relaxed max-w-sm"
         >
           Esculturas orgánicas y detalles de interior, hechos a mano — una pieza a la vez.
         </p>
@@ -133,7 +155,7 @@ export function FontForm({ defaultValues }: { defaultValues: FontContent }) {
             Título — {form.headingFont}
           </p>
           <p className="text-[10px] uppercase tracking-widest text-stone-300">
-            Cuerpo — {form.bodyFont}
+            Cuerpo — {form.bodyFont} · {form.fontSize}px
           </p>
         </div>
       </div>

@@ -6,6 +6,10 @@ function isValidFontName(name: string): boolean {
   return typeof name === 'string' && /^[A-Za-z0-9 ]+$/.test(name.trim()) && name.trim().length > 0;
 }
 
+function isValidFontSize(n: unknown): n is number {
+  return typeof n === 'number' && Number.isInteger(n) && n >= 12 && n <= 20;
+}
+
 export async function GET() {
   return NextResponse.json(await getFontContent());
 }
@@ -17,9 +21,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: 'Invalid font name' }, { status: 400 });
   }
 
+  if (!isValidFontSize(data.fontSize)) {
+    return NextResponse.json({ ok: false, error: 'Invalid font size' }, { status: 400 });
+  }
+
   const payload: FontContent = {
     headingFont: data.headingFont.trim(),
     bodyFont: data.bodyFont.trim(),
+    fontSize: data.fontSize,
   };
 
   await writeKv('font', payload);

@@ -80,4 +80,5 @@ export type ProductsData = {
 export type FontContent = {
   headingFont: string;
   bodyFont: string;
+  fontSize: number;
 };

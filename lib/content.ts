@@ -36,7 +36,7 @@ export async function getFontContent(): Promise<FontContent> {
   try {
     return await kvGet<FontContent>('font');
   } catch {
-    return { headingFont: 'Geist', bodyFont: 'Geist' };
+    return { headingFont: 'Geist', bodyFont: 'Geist', fontSize: 16 };
   }
 }
 
