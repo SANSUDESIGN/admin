@@ -10,6 +10,9 @@ export type Product = {
   dimensions: string;
   price: string;
   mercadolibreUrl: string;
+  cuidado?: string;
+  encargos?: string;
+  envio?: string;
 };
 
 export type HeroContent = {

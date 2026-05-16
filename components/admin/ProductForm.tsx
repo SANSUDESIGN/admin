@@ -69,6 +69,14 @@ export function ProductForm({ product: initial, allProducts, isNew = false }: Pr
       <Field label="URL de MercadoLibre" value={form.mercadolibreUrl} onChange={(v) => set('mercadolibreUrl', v)} />
       <Textarea label="Descripción" value={form.description} onChange={(v) => set('description', v)} rows={4} />
 
+      {/* Sections */}
+      <div className="flex flex-col gap-4 border-t border-stone-100 pt-6">
+        <p className="text-[10px] uppercase tracking-widest text-stone-400">Secciones del producto</p>
+        <Textarea label="Cuidado de la pieza" value={form.cuidado ?? ''} onChange={(v) => set('cuidado', v)} rows={3} />
+        <Textarea label="Encargos" value={form.encargos ?? ''} onChange={(v) => set('encargos', v)} rows={3} />
+        <Textarea label="Envío" value={form.envio ?? ''} onChange={(v) => set('envio', v)} rows={3} />
+      </div>
+
       {/* Images */}
       <div className="flex flex-col gap-3">
         <p className="text-[10px] uppercase tracking-widest text-stone-400">Imágenes</p>
