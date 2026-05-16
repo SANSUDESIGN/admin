@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const COOKIE_NAME = 'admin_session';
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
-const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
+const MAX_BYTES = 500 * 1024 * 1024; // 500 MB
 
 function randomId(length = 10): string {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   const contentLength = parseInt(request.headers.get('content-length') ?? '0', 10);
   if (contentLength > MAX_BYTES) {
-    return NextResponse.json({ error: 'File must be under 10 MB' }, { status: 400 });
+    return NextResponse.json({ error: 'File must be under 500 MB' }, { status: 400 });
   }
 
   try {
