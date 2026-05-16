@@ -1,4 +1,4 @@
-import { put } from '@vercel/blob';
+import { put, list } from '@vercel/blob';
 import { NextRequest, NextResponse } from 'next/server';
 
 const COOKIE_NAME = 'admin_session';
@@ -33,6 +33,20 @@ async function isAuthenticated(request: NextRequest): Promise<boolean> {
   if (!cookie) return false;
   const expected = await computeToken(adminPassword);
   return cookie === expected;
+}
+
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  if (!(await isAuthenticated(request))) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  try {
+    const { blobs } = await list({ prefix: 'products/', limit: 100 });
+    return NextResponse.json({ blobs });
+  } catch (err) {
+    console.error('[upload] Vercel Blob list error:', err);
+    return NextResponse.json({ error: 'Failed to list blobs' }, { status: 500 });
+  }
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
