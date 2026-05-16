@@ -5,6 +5,12 @@ const COOKIE_NAME = 'admin_session';
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
+function randomId(length = 10): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  return Array.from(bytes, (b) => chars[b % chars.length]).join('');
+}
+
 async function computeToken(password: string): Promise<string> {
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -54,7 +60,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
-    const blob = await put(`products/${filename}`, request.body!, {
+    const blob = await put(`products/${randomId()}-${filename}`, request.body!, {
       access: 'public',
       contentType: mimeType,
     });
