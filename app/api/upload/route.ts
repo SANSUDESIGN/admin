@@ -1,15 +1,10 @@
-import { put, list } from '@vercel/blob';
+import { list } from '@vercel/blob';
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextRequest, NextResponse } from 'next/server';
 
 const COOKIE_NAME = 'admin_session';
 const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const MAX_BYTES = 500 * 1024 * 1024; // 500 MB
-
-function randomId(length = 10): string {
-  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-  const bytes = crypto.getRandomValues(new Uint8Array(length));
-  return Array.from(bytes, (b) => chars[b % chars.length]).join('');
-}
 
 async function computeToken(password: string): Promise<string> {
   const enc = new TextEncoder();
@@ -50,37 +45,34 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 }
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  if (!(await isAuthenticated(request))) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const body = (await request.json()) as HandleUploadBody;
 
-  const { searchParams } = new URL(request.url);
-  const filename = searchParams.get('filename');
-  if (!filename) {
-    return NextResponse.json({ error: 'filename is required' }, { status: 400 });
-  }
-
-  const mimeType = request.headers.get('content-type')?.split(';')[0].trim() ?? '';
-  if (!ALLOWED_MIME_TYPES.includes(mimeType)) {
-    return NextResponse.json(
-      { error: 'Only JPEG, PNG, and WebP are allowed' },
-      { status: 400 },
-    );
-  }
-
-  const contentLength = parseInt(request.headers.get('content-length') ?? '0', 10);
-  if (contentLength > MAX_BYTES) {
-    return NextResponse.json({ error: 'File must be under 500 MB' }, { status: 400 });
+  // Completion callbacks come from Vercel's servers (no cookie) — verified internally by handleUpload.
+  // Token generation requests come from the browser and must be authenticated.
+  if (body.type === 'blob.generate-client-token') {
+    if (!(await isAuthenticated(request))) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
   }
 
   try {
-    const blob = await put(`products/${randomId()}-${filename}`, request.body!, {
-      access: 'public',
-      contentType: mimeType,
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async (pathname) => {
+        return {
+          allowedContentTypes: ALLOWED_MIME_TYPES,
+          maximumSizeInBytes: MAX_BYTES,
+        };
+      },
+      onUploadCompleted: async ({ blob }) => {
+        console.log('[upload] completed:', blob.url);
+      },
     });
-    return NextResponse.json(blob);
+
+    return NextResponse.json(jsonResponse);
   } catch (err) {
-    console.error('[upload] Vercel Blob error:', err);
+    console.error('[upload] handleUpload error:', err);
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
   }
 }

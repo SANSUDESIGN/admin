@@ -1,7 +1,14 @@
 'use client';
 
 import type { ListBlobResultBlob, PutBlobResult } from '@vercel/blob';
+import { upload } from '@vercel/blob/client';
 import { useState, useRef, useEffect } from 'react';
+
+function randomId(length = 10): string {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  return Array.from(bytes, (b) => chars[b % chars.length]).join('');
+}
 
 type FileResult =
   | { name: string; status: 'uploading' }
@@ -44,24 +51,16 @@ export default function UploadPage() {
     try {
       for (const file of fileList) {
         try {
-          const response = await fetch(
-            `/api/upload?filename=${encodeURIComponent(file.name)}`,
-            { method: 'POST', body: file },
-          );
-          const data = await response.json();
-          if (!response.ok) {
-            updateResult(file.name, {
-              name: file.name,
-              status: 'error',
-              error: (data as { error?: string }).error ?? `HTTP ${response.status}`,
-            });
-          } else {
-            const blob = data as PutBlobResult;
-            updateResult(file.name, { name: file.name, status: 'success', blob });
-            setGallery((prev) => [blob as unknown as ListBlobResultBlob, ...prev]);
-          }
-        } catch {
-          updateResult(file.name, { name: file.name, status: 'error', error: 'Network error' });
+          const pathname = `products/${randomId()}-${file.name}`;
+          const blob = await upload(pathname, file, {
+            access: 'public',
+            handleUploadUrl: '/api/upload',
+          });
+          updateResult(file.name, { name: file.name, status: 'success', blob });
+          setGallery((prev) => [blob as unknown as ListBlobResultBlob, ...prev]);
+        } catch (err) {
+          const message = err instanceof Error ? err.message : 'Upload failed';
+          updateResult(file.name, { name: file.name, status: 'error', error: message });
         }
       }
     } finally {
