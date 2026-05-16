@@ -1,7 +1,7 @@
 'use client';
 
-import type { PutBlobResult } from '@vercel/blob';
-import { useState, useRef } from 'react';
+import type { ListBlobResultBlob, PutBlobResult } from '@vercel/blob';
+import { useState, useRef, useEffect } from 'react';
 
 type FileResult =
   | { name: string; status: 'uploading' }
@@ -12,6 +12,17 @@ export default function UploadPage() {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [results, setResults] = useState<FileResult[]>([]);
+  const [gallery, setGallery] = useState<ListBlobResultBlob[]>([]);
+  const [galleryLoading, setGalleryLoading] = useState(true);
+  const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch('/api/upload')
+      .then((r) => r.json())
+      .then((data: { blobs?: ListBlobResultBlob[] }) => setGallery(data.blobs ?? []))
+      .catch(() => {})
+      .finally(() => setGalleryLoading(false));
+  }, []);
 
   function updateResult(name: string, next: FileResult) {
     setResults((prev) => prev.map((r) => (r.name === name ? next : r)));
@@ -45,7 +56,9 @@ export default function UploadPage() {
               error: (data as { error?: string }).error ?? `HTTP ${response.status}`,
             });
           } else {
-            updateResult(file.name, { name: file.name, status: 'success', blob: data as PutBlobResult });
+            const blob = data as PutBlobResult;
+            updateResult(file.name, { name: file.name, status: 'success', blob });
+            setGallery((prev) => [blob as unknown as ListBlobResultBlob, ...prev]);
           }
         } catch {
           updateResult(file.name, { name: file.name, status: 'error', error: 'Network error' });
@@ -61,6 +74,12 @@ export default function UploadPage() {
 
   function copyAll() {
     navigator.clipboard.writeText(successResults.map((r) => r.blob.url).join('\n'));
+  }
+
+  function copyUrl(url: string) {
+    navigator.clipboard.writeText(url);
+    setCopiedUrl(url);
+    setTimeout(() => setCopiedUrl(null), 1500);
   }
 
   return (
@@ -88,7 +107,7 @@ export default function UploadPage() {
         </form>
 
         {results.length > 0 && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 mb-12">
             <div className="flex justify-between items-center border-b border-stone-200 pb-3">
               <p className="text-xs uppercase tracking-widest text-stone-400">URLs generadas</p>
               {successResults.length > 1 && (
@@ -143,6 +162,43 @@ export default function UploadPage() {
             })}
           </div>
         )}
+
+        {/* Persistent gallery */}
+        <div>
+          <p className="text-xs uppercase tracking-widest text-stone-400 border-b border-stone-200 pb-3 mb-6">
+            Subidas anteriores
+          </p>
+
+          {galleryLoading ? (
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} className="aspect-square bg-stone-100 animate-pulse" />
+              ))}
+            </div>
+          ) : gallery.length === 0 ? (
+            <p className="text-xs text-stone-400">No hay imágenes subidas aún.</p>
+          ) : (
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+              {gallery.map((blob) => (
+                <button
+                  key={blob.url}
+                  onClick={() => copyUrl(blob.url)}
+                  title={blob.pathname}
+                  className="relative aspect-square bg-stone-100 overflow-hidden group focus:outline-none"
+                >
+                  <img
+                    src={blob.url}
+                    alt=""
+                    className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-60"
+                  />
+                  <span className="absolute inset-0 flex items-center justify-center text-[10px] uppercase tracking-widest text-stone-900 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                    {copiedUrl === blob.url ? '¡Copiado!' : 'Copiar URL'}
+                  </span>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </main>
   );
