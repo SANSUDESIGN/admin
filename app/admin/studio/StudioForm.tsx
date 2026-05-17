@@ -55,6 +55,7 @@ export function StudioForm({ defaultValues }: { defaultValues: StudioContent }) 
       </div>
 
       <Textarea label="Tagline (cursiva al final)" value={form.tagline} onChange={(v) => set('tagline', v)} rows={2} />
+      <Field label="Foto de la artista (URL)" value={form.photoUrl ?? ''} onChange={(v) => set('photoUrl', v)} />
       <SaveButton status={status} onSave={handleSave} />
     </div>
   );

@@ -66,7 +66,6 @@ export function ProductForm({ product: initial, allProducts, isNew = false }: Pr
         <Field label="Dimensiones (ej. 32 × 18 × 18 cm)" value={form.dimensions} onChange={(v) => set('dimensions', v)} />
       </div>
 
-      <Field label="URL de MercadoLibre" value={form.mercadolibreUrl} onChange={(v) => set('mercadolibreUrl', v)} />
       <Textarea label="Descripción" value={form.description} onChange={(v) => set('description', v)} rows={4} />
 
       {/* Sections */}

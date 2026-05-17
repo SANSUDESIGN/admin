@@ -29,14 +29,6 @@ export function FooterForm({ defaultValues }: { defaultValues: FooterContent }) 
       <Field label="Email de contacto" value={form.email} onChange={(v) => set('email', v)} />
 
       <div className="border-t border-stone-200 pt-6">
-        <p className="text-[10px] uppercase tracking-widest text-stone-400 mb-4">Columna Estudio</p>
-        <Field label="Título de columna" value={form.studioHeading} onChange={(v) => set('studioHeading', v)} />
-        <div className="mt-4">
-          <Textarea label="Texto" value={form.studioText} onChange={(v) => set('studioText', v)} rows={4} />
-        </div>
-      </div>
-
-      <div className="border-t border-stone-200 pt-6">
         <p className="text-[10px] uppercase tracking-widest text-stone-400 mb-4">Columna Redes</p>
         <div className="flex flex-col gap-4">
           <Field label="Título de columna" value={form.socialHeading} onChange={(v) => set('socialHeading', v)} />

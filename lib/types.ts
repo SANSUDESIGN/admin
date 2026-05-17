@@ -9,7 +9,7 @@ export type Product = {
   description: string;
   dimensions: string;
   price: string;
-  mercadolibreUrl: string;
+  mercadolibreUrl?: string;
   cuidado?: string;
   encargos?: string;
   envio?: string;
@@ -49,6 +49,7 @@ export type StudioContent = {
   column1: string[];
   column2: string[];
   tagline: string;
+  photoUrl?: string;
 };
 
 export type FaqItem = {
