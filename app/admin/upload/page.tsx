@@ -22,6 +22,7 @@ export default function UploadPage() {
   const [gallery, setGallery] = useState<ListBlobResultBlob[]>([]);
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
+  const [visibleCount, setVisibleCount] = useState(4);
 
   useEffect(() => {
     fetch('/api/upload')
@@ -170,32 +171,42 @@ export default function UploadPage() {
 
           {galleryLoading ? (
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-              {Array.from({ length: 8 }).map((_, i) => (
+              {Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="aspect-square bg-stone-100 animate-pulse" />
               ))}
             </div>
           ) : gallery.length === 0 ? (
             <p className="text-xs text-stone-400">No hay imágenes subidas aún.</p>
           ) : (
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
-              {gallery.map((blob) => (
+            <>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                {gallery.slice(0, visibleCount).map((blob) => (
+                  <button
+                    key={blob.url}
+                    onClick={() => copyUrl(blob.url)}
+                    title={blob.pathname}
+                    className="relative aspect-square bg-stone-100 overflow-hidden group focus:outline-none"
+                  >
+                    <img
+                      src={blob.url}
+                      alt=""
+                      className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-60"
+                    />
+                    <span className="absolute inset-0 flex items-center justify-center text-[10px] uppercase tracking-widest text-stone-900 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                      {copiedUrl === blob.url ? '¡Copiado!' : 'Copiar URL'}
+                    </span>
+                  </button>
+                ))}
+              </div>
+              {visibleCount < gallery.length && (
                 <button
-                  key={blob.url}
-                  onClick={() => copyUrl(blob.url)}
-                  title={blob.pathname}
-                  className="relative aspect-square bg-stone-100 overflow-hidden group focus:outline-none"
+                  onClick={() => setVisibleCount((n) => n + 4)}
+                  className="mt-4 text-xs uppercase tracking-widest text-stone-900 underline underline-offset-4"
                 >
-                  <img
-                    src={blob.url}
-                    alt=""
-                    className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-60"
-                  />
-                  <span className="absolute inset-0 flex items-center justify-center text-[10px] uppercase tracking-widest text-stone-900 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    {copiedUrl === blob.url ? '¡Copiado!' : 'Copiar URL'}
-                  </span>
+                  Mostrar 4 más ({gallery.length - visibleCount} restantes)
                 </button>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
       </div>
