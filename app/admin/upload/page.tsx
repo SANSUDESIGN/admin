@@ -10,6 +10,10 @@ function randomId(length = 10): string {
   return Array.from(bytes, (b) => chars[b % chars.length]).join('');
 }
 
+function isVideo(url: string): boolean {
+  return /\.(mp4|webm)(\?|$)/i.test(url);
+}
+
 type FileResult =
   | { name: string; status: 'uploading' }
   | { name: string; status: 'success'; blob: PutBlobResult }
@@ -92,7 +96,7 @@ export default function UploadPage() {
           <input
             ref={inputFileRef}
             type="file"
-            accept="image/jpeg,image/png,image/webp"
+            accept="image/jpeg,image/png,image/webp,video/mp4,video/webm"
             multiple
             required
             className="text-sm text-stone-600 file:mr-4 file:py-2 file:px-4 file:border file:border-stone-900 file:text-xs file:uppercase file:tracking-widest file:bg-transparent file:cursor-pointer hover:file:bg-stone-900 hover:file:text-white transition-colors"
@@ -146,7 +150,11 @@ export default function UploadPage() {
 
               return (
                 <div key={result.blob.url} className="flex gap-4 items-start border-b border-stone-100 pb-4">
-                  <img src={result.blob.url} alt="" className="w-16 h-16 object-cover bg-stone-100 shrink-0" />
+                  {isVideo(result.blob.url) ? (
+                    <video src={result.blob.url} muted loop className="w-16 h-16 object-cover bg-stone-100 shrink-0" />
+                  ) : (
+                    <img src={result.blob.url} alt="" className="w-16 h-16 object-cover bg-stone-100 shrink-0" />
+                  )}
                   <div className="flex flex-col gap-1 min-w-0">
                     <p className="text-xs text-stone-400 truncate">{result.blob.pathname}</p>
                     <p className="text-xs font-mono text-stone-700 break-all">{result.blob.url}</p>
@@ -187,11 +195,20 @@ export default function UploadPage() {
                     title={blob.pathname}
                     className="relative aspect-square bg-stone-100 overflow-hidden group focus:outline-none"
                   >
-                    <img
-                      src={blob.url}
-                      alt=""
-                      className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-60"
-                    />
+                    {isVideo(blob.url) ? (
+                      <video
+                        src={blob.url}
+                        muted
+                        loop
+                        className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-60"
+                      />
+                    ) : (
+                      <img
+                        src={blob.url}
+                        alt=""
+                        className="w-full h-full object-cover transition-opacity duration-200 group-hover:opacity-60"
+                      />
+                    )}
                     <span className="absolute inset-0 flex items-center justify-center text-[10px] uppercase tracking-widest text-stone-900 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       {copiedUrl === blob.url ? '¡Copiado!' : 'Copiar URL'}
                     </span>

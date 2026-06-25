@@ -42,6 +42,24 @@ export function HeroForm({ defaultValues }: { defaultValues: HeroContent }) {
           <img src={form.imageUrl} alt="Preview" className="w-full max-h-48 object-cover bg-stone-100" />
         )}
       </div>
+      <div className="flex flex-col gap-2">
+        <Field
+          label="URL de video de fondo (opcional — reemplaza la imagen; la imagen se usa como póster)"
+          value={form.videoUrl ?? ''}
+          onChange={(v) => set('videoUrl', v)}
+        />
+        {form.videoUrl && (
+          <video
+            src={form.videoUrl}
+            poster={form.imageUrl || undefined}
+            muted
+            loop
+            autoPlay
+            playsInline
+            className="w-full max-h-48 object-cover bg-stone-100"
+          />
+        )}
+      </div>
       <SaveButton status={status} onSave={handleSave} />
     </div>
   );

@@ -28,6 +28,8 @@ export type HeroContent = {
   subtitle: string;
   ctaText: string;
   imageUrl: string;
+  // Optional background video; when set it plays over imageUrl (used as poster).
+  videoUrl?: string;
   // Sansu V2 hero tagline (optional)
   tagline1?: string;
   tagline2?: string;
@@ -72,18 +74,25 @@ export type FaqContent = {
   items: FaqItem[];
 };
 
+export type FooterNavLink = {
+  label: string;
+  href: string;
+};
+
 export type FooterContent = {
   tagline: string;
   email: string;
-  studioHeading: string;
   studioText: string;
+  exploreHeading: string;
+  navLinks: FooterNavLink[];
   socialHeading: string;
   instagramHandle: string;
   instagramUrl: string;
+  whatsappLabel: string;
   whatsappUrl: string;
+  brand: string;
+  privacyLabel: string;
   copyright: string;
-  privacyNote: string;
-  navTagline: string;
 };
 
 export type ProductsData = {
