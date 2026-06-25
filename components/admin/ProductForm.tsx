@@ -64,6 +64,23 @@ export function ProductForm({ product: initial, allProducts, isNew = false }: Pr
         <Field label="Categoría" value={form.category} onChange={(v) => set('category', v)} />
         <Field label="Precio (ej. ARS 85.000)" value={form.price} onChange={(v) => set('price', v)} />
         <Field label="Dimensiones (ej. 32 × 18 × 18 cm)" value={form.dimensions} onChange={(v) => set('dimensions', v)} />
+        <Field label="Serie (ej. SEDIMENT)" value={form.series ?? ''} onChange={(v) => set('series', v)} />
+        <Field label="Etiqueta edición (ej. ED. 1/8)" value={form.editionLabel ?? ''} onChange={(v) => set('editionLabel', v)} />
+      </div>
+
+      {/* Status — drives the card tag (NEW / SOLD OUT / EDITION) */}
+      <div className="flex flex-col gap-1.5 max-w-xs">
+        <label className="text-[10px] uppercase tracking-widest text-stone-400">Estado</label>
+        <select
+          value={form.status ?? 'available'}
+          onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as Product['status'] }))}
+          className="border border-stone-200 px-3 py-2 text-sm bg-white focus:outline-none focus:border-stone-900 transition-colors"
+        >
+          <option value="available">Disponible</option>
+          <option value="new">Nuevo (NEW)</option>
+          <option value="edition">Edición (ED.)</option>
+          <option value="sold">Vendido (SOLD OUT)</option>
+        </select>
       </div>
 
       <Textarea label="Descripción" value={form.description} onChange={(v) => set('description', v)} rows={4} />

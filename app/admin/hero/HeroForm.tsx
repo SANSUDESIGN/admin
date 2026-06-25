@@ -30,6 +30,10 @@ export function HeroForm({ defaultValues }: { defaultValues: HeroContent }) {
         <Field label="Línea 2" value={form.headingLine2} onChange={(v) => set('headingLine2', v)} />
         <Field label="Línea 3 (cursiva)" value={form.headingLine3} onChange={(v) => set('headingLine3', v)} />
       </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-stone-100 pt-6">
+        <Field label="Tagline línea 1" value={form.tagline1 ?? ''} onChange={(v) => set('tagline1', v)} placeholder="SOME THINGS AREN'T SEEN." />
+        <Field label="Tagline línea 2" value={form.tagline2 ?? ''} onChange={(v) => set('tagline2', v)} placeholder="THEY'RE FELT." />
+      </div>
       <Textarea label="Subtítulo" value={form.subtitle} onChange={(v) => set('subtitle', v)} rows={3} />
       <Field label="Texto del botón" value={form.ctaText} onChange={(v) => set('ctaText', v)} />
       <div className="flex flex-col gap-2">

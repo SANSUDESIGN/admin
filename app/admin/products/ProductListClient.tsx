@@ -25,13 +25,6 @@ export function ProductListClient({ initialProducts }: { initialProducts: Produc
     setSaving(null);
   }
 
-  async function deleteProduct(id: number) {
-    if (!confirm('¿Eliminar esta pieza permanentemente?')) return;
-    const updated = products.filter((p) => p.id !== id);
-    setProducts(updated);
-    await saveProducts(updated);
-  }
-
   return (
     <div className="flex flex-col gap-2">
       {products.map((p) => (
@@ -65,13 +58,7 @@ export function ProductListClient({ initialProducts }: { initialProducts: Produc
               disabled={saving === p.id}
               className="text-xs uppercase tracking-widest text-stone-400 hover:text-stone-900 transition-colors disabled:opacity-40"
             >
-              {p.hidden ? 'Mostrar' : 'Ocultar'}
-            </button>
-            <button
-              onClick={() => deleteProduct(p.id)}
-              className="text-xs uppercase tracking-widest text-stone-300 hover:text-red-600 transition-colors"
-            >
-              Eliminar
+              {p.hidden ? 'Activar' : 'Desactivar'}
             </button>
           </div>
         </div>

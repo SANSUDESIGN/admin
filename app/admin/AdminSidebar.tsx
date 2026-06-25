@@ -15,7 +15,6 @@ const sections = [
   { label: '──────────', href: null },
   { label: 'Productos', href: '/admin/products' },
   { label: 'Subir imágenes', href: '/admin/upload' },
-  { label: 'Fuentes', href: '/admin/font' },
 ];
 
 export function AdminSidebar() {
@@ -56,12 +55,12 @@ export function AdminSidebar() {
 
       <div className="px-3 pb-4 flex flex-col gap-1">
         <a
-          href="https://sansu.design"
+          href="http://localhost:3000"
           target="_blank"
           rel="noopener noreferrer"
           className="block px-3 py-2 text-xs text-stone-400 hover:text-stone-600 transition-colors"
         >
-          Ver sitio →
+          Ver sitio local →
         </a>
         <button
           onClick={handleLogout}

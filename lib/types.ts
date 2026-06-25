@@ -1,3 +1,5 @@
+export type ProductStatus = 'available' | 'new' | 'sold' | 'edition';
+
 export type Product = {
   id: number;
   title: string;
@@ -13,6 +15,10 @@ export type Product = {
   cuidado?: string;
   encargos?: string;
   envio?: string;
+  // Sansu V2 (optional, additive)
+  series?: string;
+  status?: ProductStatus;
+  editionLabel?: string;
 };
 
 export type HeroContent = {
@@ -22,6 +28,9 @@ export type HeroContent = {
   subtitle: string;
   ctaText: string;
   imageUrl: string;
+  // Sansu V2 hero tagline (optional)
+  tagline1?: string;
+  tagline2?: string;
 };
 
 export type WorksContent = {
