@@ -1,12 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { HeroContent } from '@/lib/types';
 import { Field, Textarea, SaveButton } from '@/components/admin/FormControls';
 
 export function HeroForm({ defaultValues }: { defaultValues: HeroContent }) {
   const [form, setForm] = useState(defaultValues);
   const [status, setStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Force muted autoplay so the preview matches the storefront (React's muted attribute
+  // is unreliable, which otherwise leaves a non-playing video with a play button).
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = true;
+    video.defaultMuted = true;
+    const played = video.play();
+    if (played && typeof played.catch === 'function') played.catch(() => {});
+  }, [form.videoUrl]);
 
   function set(key: keyof HeroContent, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -50,13 +62,16 @@ export function HeroForm({ defaultValues }: { defaultValues: HeroContent }) {
         />
         {form.videoUrl && (
           <video
+            ref={videoRef}
             src={form.videoUrl}
             poster={form.imageUrl || undefined}
             muted
             loop
             autoPlay
             playsInline
-            className="w-full max-h-48 object-cover bg-stone-100"
+            controls={false}
+            disablePictureInPicture
+            className="pointer-events-none w-full max-h-48 object-cover bg-stone-100"
           />
         )}
       </div>
