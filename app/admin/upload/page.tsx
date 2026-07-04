@@ -1,8 +1,10 @@
 'use client';
 
-import type { ListBlobResultBlob, PutBlobResult } from '@vercel/blob';
-import { upload } from '@vercel/blob/client';
 import { useState, useRef, useEffect } from 'react';
+
+const MAX_BYTES = 500 * 1024 * 1024; // 500 MB — mirrors the server cap (advisory client-side)
+
+type Uploaded = { url: string; pathname: string };
 
 function randomId(length = 10): string {
   const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -14,16 +16,46 @@ function isVideo(url: string): boolean {
   return /\.(mp4|webm)(\?|$)/i.test(url);
 }
 
+// Two-step direct-to-R2 upload: ask the API for a presigned PUT URL, then PUT the file.
+async function uploadFile(file: File): Promise<Uploaded> {
+  if (file.size > MAX_BYTES) {
+    throw new Error('El archivo supera el límite de 500 MB');
+  }
+
+  const pathname = `products/${randomId()}-${file.name}`;
+  const res = await fetch('/api/upload', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pathname, contentType: file.type, size: file.size }),
+  });
+  if (!res.ok) {
+    const data = (await res.json().catch(() => ({}))) as { error?: string };
+    throw new Error(data.error ?? 'No se pudo iniciar la subida');
+  }
+  const { uploadUrl, url, requiredHeaders } = (await res.json()) as {
+    uploadUrl: string;
+    url: string;
+    requiredHeaders: Record<string, string>;
+  };
+
+  const put = await fetch(uploadUrl, { method: 'PUT', body: file, headers: requiredHeaders });
+  if (!put.ok) {
+    throw new Error(`Fallo la subida a R2 (${put.status})`);
+  }
+
+  return { url, pathname };
+}
+
 type FileResult =
   | { name: string; status: 'uploading' }
-  | { name: string; status: 'success'; blob: PutBlobResult }
+  | { name: string; status: 'success'; blob: Uploaded }
   | { name: string; status: 'error'; error: string };
 
 export default function UploadPage() {
   const inputFileRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
   const [results, setResults] = useState<FileResult[]>([]);
-  const [gallery, setGallery] = useState<ListBlobResultBlob[]>([]);
+  const [gallery, setGallery] = useState<Uploaded[]>([]);
   const [galleryLoading, setGalleryLoading] = useState(true);
   const [copiedUrl, setCopiedUrl] = useState<string | null>(null);
   const [visibleCount, setVisibleCount] = useState(4);
@@ -31,7 +63,7 @@ export default function UploadPage() {
   useEffect(() => {
     fetch('/api/upload')
       .then((r) => r.json())
-      .then((data: { blobs?: ListBlobResultBlob[] }) => setGallery(data.blobs ?? []))
+      .then((data: { blobs?: Uploaded[] }) => setGallery(data.blobs ?? []))
       .catch(() => {})
       .finally(() => setGalleryLoading(false));
   }, []);
@@ -56,13 +88,9 @@ export default function UploadPage() {
     try {
       for (const file of fileList) {
         try {
-          const pathname = `products/${randomId()}-${file.name}`;
-          const blob = await upload(pathname, file, {
-            access: 'public',
-            handleUploadUrl: '/api/upload',
-          });
+          const blob = await uploadFile(file);
           updateResult(file.name, { name: file.name, status: 'success', blob });
-          setGallery((prev) => [blob as unknown as ListBlobResultBlob, ...prev]);
+          setGallery((prev) => [blob, ...prev]);
         } catch (err) {
           const message = err instanceof Error ? err.message : 'Upload failed';
           updateResult(file.name, { name: file.name, status: 'error', error: message });
